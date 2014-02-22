@@ -1,0 +1,17 @@
+
+	body {
+		display: inline-block;
+		background-color: rgb(53, 54, 59);
+		height: 60px;
+		width: 340px;
+	}
+	html {
+		height: 60px;
+		width: 340px;
+	}
+	div {
+		display: inline-block;
+	}
+	input[type="text"] {
+		background-color: rgb(243, 207, 141)
+	}

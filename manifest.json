@@ -1,0 +1,20 @@
+{
+	"name": "Search Extension",
+	"version": "0.1",
+	"manifest_version": 2,
+	"browser_action": {
+		"default_icon": "images/icon.png",
+		"default_title": "Search Engine",
+		"default_popup": "textarea.html"
+	},
+	"content_scripts": [
+		{
+			"matches": ["http://*/*", "https://*/*"],
+			"js": ["jquery-1.11.0.min.js", "content-script.js"],
+			"run-at": "document-end"
+		}
+	],
+	"permissions": [
+		"tabs", "<all_urls>"
+	]
+}
