@@ -1,28 +1,28 @@
 $(document).ready(function() {
-	console.log("document is ready");
-  $('p').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('a').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('h1').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('h2').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('h3').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('h4').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('b').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('u').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('i').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('li').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('BLOCKQUOTE').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('pre').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('code').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('article').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('marquee').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('div').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>');
-  $('span').replaceText(/(a)/gi, '<span style="background-color: rgb(243, 207, 141);">$1</span>'); // TODO fix span bug
-	parseDoc();
+  console.log("document is ready");
+  $('p').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('a').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('h1').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('h2').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('h3').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('h4').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('b').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('u').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('i').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('li').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('BLOCKQUOTE').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('pre').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('code').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('article').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('marquee').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('div').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('span').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
+  parseDoc();
 });
 
 function parseDoc() {
-	var documentText = $('body').text(); // it seems easy :)
-	//console.log(documentText);
+  var documentText = $('body').text(); // it seems easy :)
+  //console.log(documentText);
 }
 
 $.fn.replaceText = function( search, replace, text_only ) {
