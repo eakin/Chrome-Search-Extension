@@ -1,8 +1,5 @@
 $(document).ready(function() {
-  console.log("document is ready");
   parseDoc();
-
- 
 });
 
 function parseDoc() {
@@ -21,8 +18,10 @@ $.fn.replaceText = function( search, replace, text_only ) {
                 if ( !text_only && /</.test( new_val ) ) {
                   $(node).before( new_val );
                   remove.push( node );
+                  localStorage.counter++;
                 } else {
                   node.nodeValue = new_val;
+                  localStorage.counter++;
                 }
               }
             }
@@ -37,17 +36,13 @@ function getOldDocument() {
   });
 }
 
-
-function saveDocument() {
-  //becarefull memory issues
-}
-
 function findStringFromDocument(str, caseSensitive) {
   if(caseSensitive) {
     var re = new RegExp("("+str+")","g");
   }else {
     var re = new RegExp("("+str+")","gi");
   }
+  localStorage.counter = 0;
   $('p').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
   $('a').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
   $('h1').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
@@ -67,17 +62,15 @@ function findStringFromDocument(str, caseSensitive) {
   $('span').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
 }
 
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if(request.status == "load") {
-      console.log("load event content");
     }else if(request.status == "unload") {
       console.log("unload event content");
       getOldDocument();
     }else if(request.status == "storageChange") {
       getOldDocument();
-      saveDocument();
       findStringFromDocument(request.text, false);
-      console.log("document saved and searched");
+      sendResponse({counter: localStorage.counter});
     }
-      
 });
