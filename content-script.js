@@ -1,28 +1,12 @@
 $(document).ready(function() {
   console.log("document is ready");
-  $('p').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('a').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('h1').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('h2').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('h3').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('h4').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('b').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('u').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('i').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('li').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('BLOCKQUOTE').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('pre').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('code').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('article').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('marquee').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('div').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('span').replaceText(/(a)/gi, '<mark style="background-color: rgb(243, 207, 141);">$1</mark>');
   parseDoc();
+
+ 
 });
 
 function parseDoc() {
-  var documentText = $('body').text(); // it seems easy :)
-  //console.log(documentText);
+  var documentText = $('body') // it seems easy :)
 }
 
 $.fn.replaceText = function( search, replace, text_only ) {
@@ -47,7 +31,55 @@ $.fn.replaceText = function( search, replace, text_only ) {
     });
 };
 
-/*
-chrome.runtime.sendMessage ({})
+function getOldDocument() {
+  var markElements = document.getElementsByClassName("search-extension");
+  for(i = 0; i < markElements.length; i++) {
 
-*/
+    markElements[i].parentNode.removeChild(markElements[i]);
+  }
+}
+
+
+function saveDocument() {
+  //becarefull memory issues
+}
+
+function findStringFromDocument(str, caseSensitive) {
+  if(caseSensitive) {
+    var re = new RegExp("("+str+")","g");
+  }else {
+    var re = new RegExp("("+str+")","gi");
+  }
+  $('p').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('a').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('h1').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('h2').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('h3').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('h4').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('b').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('u').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('i').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('li').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('BLOCKQUOTE').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('pre').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('code').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('article').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('marquee').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('div').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  $('span').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+}
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if(request.status == "load") {
+      console.log("load event content");
+    }else if(request.status == "unload") {
+      console.log("unload event content");
+      getOldDocument();
+    }else if(request.status == "storageChange") {
+      getOldDocument();
+      saveDocument();
+      findStringFromDocument(request.text, false);
+      console.log("document saved and searched");
+    }
+      
+});
