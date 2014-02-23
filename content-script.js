@@ -32,11 +32,9 @@ $.fn.replaceText = function( search, replace, text_only ) {
 };
 
 function getOldDocument() {
-  var markElements = document.getElementsByClassName("search-extension");
-  for(i = 0; i < markElements.length; i++) {
-
-    markElements[i].parentNode.removeChild(markElements[i]);
-  }
+  $(".search-extension").each(function() {
+    $(this).replaceWith($(this).text());
+  });
 }
 
 
