@@ -1,15 +1,117 @@
+
+var wordList = wordList || {};
+
 $(document).ready(function() {
+  //TODO change it with domcontentload event
   parseDoc();
 });
 
+
+/*
+ THIS FUNCTION CREATES NEW DICTIONARY BASED ON DOCUMENT TEXT
+*/
 function parseDoc() {
-  var documentText = $('body') // it seems easy :)
+  var documentText = $('body').text();
+  createDictionary(documentText.split(/\s+/g));
+}
+
+
+/*
+  DICTIONARY ITEMS
+*/
+function dictionaryItem() {
+  var term = "";
+  var editItemArrayForSuggestions = {};
+  var count = 0;
+}
+
+dictionaryItem.prototype.getHashCode = function() {
+  return hashCode(this.term);
+};
+
+dictionaryItem.prototype.equals = function(anotherDictionaryItem) {
+  return this.term == anotherDictionaryItem.term;
+};
+
+/*
+  EDIT ITEMS
+*/
+function editItem() {
+  var term = "";
+  var distance = 0;
+}
+
+editItem.prototype.getHashCode = function() {
+  return hashCode(this.term);
+};
+
+editItem.prototype.equals = function(anotherEditItem) {
+  return this.term == anotherEditItem.term;
+};
+
+/*
+  SUGGESTION ITEMS
+*/
+function suggestItem() {
+  var term = "";
+  var distance = 0;
+}
+
+suggestItem.prototype.getHashCode = function() {
+  return hashCode(this.term);
+};
+
+suggestItem.prototype.equals = function(anotherSuggestItem) {
+  return this.term == anotherSuggestItem.term;
+};
+
+/*
+  HASHCODE FUNCTION
+*/
+function hashCode (str){
+    var hash = 0, i, char;
+    if (str.length == 0) return hash;
+    for (i = 0, l = str.length; i < l; i++) {
+        char  = str.charCodeAt(i);
+        hash  = ((hash<<5)-hash)+char;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+}
+
+function createDictionary(textArray) {
+  textArray.forEach(function(e) {
+    var wordNum = 0;
+    if(createEntry(e)) {
+      wordNum++;
+    }
+  });
+}
+
+function createEntry(word) {
+  // var isNewItem = false;
+
+  // TODO write search func for wordlist
+  // if(wordList.indexOf(word) != -1) {
+  //   // increase word repeat sequance
+  // }else {
+  //   wordList.push(word);
+  //   isNewItem = true;
+  // }
+  // var edits = getEditItems(word, 0, true);
+  // edits.forEach(function(e) {
+  //   eItem = new editItem(); // TODO add editItem constructor.
+  //   eItem.term = word;
+  //   eItem.distance = e.distance;
+
+  //   //line 137 
+  // });
+  // return isNewItem;
 }
 
 $.fn.replaceText = function( search, replace, text_only ) {
   return this.each(function() {
-        var node = this.firstChild,
-        val, new_val, remove = [];
+        var val, new_val, remove = [];
         for (var node = this.firstChild; node; node = node.nextSibling) {
           if ( node.nodeType === 3 ) {
               val = node.nodeValue;
@@ -58,7 +160,7 @@ function findStringFromDocument(str, caseSensitive) {
   $('code').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
   $('article').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
   $('marquee').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
-  $('div').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
+  //$('div').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
   $('span').replaceText(re, '<mark class="search-extension" style="background-color: rgb(243, 207, 141);">$1</mark>');
 }
 
