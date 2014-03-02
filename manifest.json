@@ -16,5 +16,22 @@
 	],
 	"permissions": [
 		"tabs", "<all_urls>"
-	]
+	],
+	"commands" : {
+		"_execute_browser_action": {
+			"suggested_key": {
+			  "windows": "Ctrl+Q",
+			  "mac": "Ctrl+Q",
+			  "chromeos": "Ctrl+Q",
+			  "linux": "Ctrl+Q"
+			}
+		},
+		"_execute_page_action": {
+			"suggested_key": {
+			  "default": "Ctrl+Q",
+			  "windows": "Ctrl+Q",
+			  "mac": "Command+Q"
+		    }
+	    }
+	}
 }

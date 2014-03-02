@@ -1,10 +1,12 @@
-
-var wordList = wordList || {};
-
 $(document).ready(function() {
   //TODO change it with domcontentload event
   parseDoc();
 });
+
+var wordList = wordList || {"words": [], "values": []};
+var editDistanceMax = 1;
+
+
 
 
 /*
@@ -86,27 +88,69 @@ function createDictionary(textArray) {
       wordNum++;
     }
   });
+  console.log(wordList);
 }
 
 function createEntry(word) {
-  // var isNewItem = false;
+   var isNewItem = false;
+    var pos = wordList["words"].indexOf(word);
+   if(pos != -1) {
+     wordList["values"][pos] = wordList["values"][pos] + 1;
+     //console.log(wordList["values"][pos]);
+     return true;
 
-  // TODO write search func for wordlist
-  // if(wordList.indexOf(word) != -1) {
-  //   // increase word repeat sequance
-  // }else {
-  //   wordList.push(word);
-  //   isNewItem = true;
-  // }
-  // var edits = getEditItems(word, 0, true);
-  // edits.forEach(function(e) {
-  //   eItem = new editItem(); // TODO add editItem constructor.
-  //   eItem.term = word;
-  //   eItem.distance = e.distance;
+   }else {
 
-  //   //line 137 
-  // });
-  // return isNewItem;
+     wordList["words"].push(word);
+     wordList["values"].push(1);
+     pos = wordList["words"].indexOf(word);
+     isNewItem = true;
+     
+     var edits = getEditItems(word, 0, true);
+     for(var i = 0; i < edits["words"].length; i++) {
+      var suggestion = {"word": {}, "distance": {}};
+      suggestion["word"] = word;
+      suggestion["distance"] = edits["distance"][i];
+
+      var pos = wordList["words"].indexOf(edits["words"][i]);
+      if(pos != -1) {
+      //   if() {
+
+      //   }
+      // } else {
+
+      // }     
+     }
+   }
+   return false;
+  }
+}
+
+function getEditItems(word, editDistance, rec) {
+  editDistance++;
+  var deletes = {"words" : [], "distance": []};
+  if(word.length > 2) {
+    for (var i = 0; i < word.length; i++) {
+      var del = {"word": {}, "distance": {}};
+      del["word"] = word.removeFromString(i, 1);
+      del["distance"] = editDistance;
+      if(deletes["words"].indexOf(del["word"]) == -1 ) {
+        deletes["words"].push(del["word"]);
+        deletes["distance"].push(del["distance"]);
+
+        if(rec && editDistance < editDistanceMax) {
+          var edits = arguments.callee( del["word"], term, rec);
+          for (var i = 0; i < edits["words"].length; i++) {
+            if(deletes["words"].indexOf(edits["words"][i]) == -1) {
+              deletes["words"].push(edits["words"][i]);
+              deletes["distance"].push(edits["distance"][i]);
+            }
+          }
+        }
+      }
+    }
+  }
+  return deletes;
 }
 
 $.fn.replaceText = function( search, replace, text_only ) {
@@ -176,3 +220,18 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       sendResponse({counter: localStorage.counter});
     }
 });
+
+
+
+
+function isNullOrEmpty(str) {
+  if(str == null || str == "") {
+    return true;
+  }
+  return false;
+}
+
+// removes j character after i. character
+String.prototype.removeFromString = function(i, j) {
+  return this.replace(this.substr(i, j), "");
+};

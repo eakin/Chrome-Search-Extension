@@ -80,5 +80,6 @@ function sendSearchRequest() {
 function setCurrentPos(pos) {
 	if(pos > localStorage.counter) pos=localStorage.counter;
 	var str = pos + "/" + localStorage.counter;
-	$("#currentPos").text(str);
+	console.log("currentPos is " + str);
+	//$("#currentPos").text(str);
 } 
