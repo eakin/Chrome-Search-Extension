@@ -3,8 +3,9 @@ $(document).ready(function() {
   parseDoc();
 });
 
-var wordList = wordList || {"words": [], "values": []};
-var editDistanceMax = 1;
+var wordList = wordList || {"words": [], "values": [], "suggestions": [{"suggestionList" : {"words":[], "distance": []}}]};
+var editDistanceMax = 2;
+var verbose = 2;
 
 
 
@@ -91,18 +92,20 @@ function createDictionary(textArray) {
   console.log(wordList);
 }
 
+
 function createEntry(word) {
    var isNewItem = false;
+   if(word == "") return;
     var pos = wordList["words"].indexOf(word);
    if(pos != -1) {
      wordList["values"][pos] = wordList["values"][pos] + 1;
-     //console.log(wordList["values"][pos]);
      return true;
 
-   }else {
+    }else {
 
      wordList["words"].push(word);
      wordList["values"].push(1);
+     wordList["suggestions"].push({"suggestionList" : {"words":[], "distance": []}});
      pos = wordList["words"].indexOf(word);
      isNewItem = true;
      
@@ -114,16 +117,19 @@ function createEntry(word) {
 
       var pos = wordList["words"].indexOf(edits["words"][i]);
       if(pos != -1) {
-      //   if() {
+         if(wordList["suggestions"][pos]["suggestionList"]["words"].indexOf(suggestion["word"]) == -1) {
+          wordList["suggestions"][pos]["suggestionList"] = addLowestDistance(wordList["suggestions"][pos]["suggestionList"], suggestion);
 
-      //   }
-      // } else {
-
-      // }     
+         }
+       } else {
+        var suggestionForList = {"suggestionList" : {"words":[], "distance": []}};
+        suggestionForList["suggestionList"]["words"].push(suggestion["word"]);
+        suggestionForList["suggestionList"]["distance"].push(suggestion["distance"]);
+        wordList["suggestions"].push(suggestionForList);
+       }     
      }
    }
-   return false;
-  }
+  return false;
 }
 
 function getEditItems(word, editDistance, rec) {
@@ -139,7 +145,7 @@ function getEditItems(word, editDistance, rec) {
         deletes["distance"].push(del["distance"]);
 
         if(rec && editDistance < editDistanceMax) {
-          var edits = arguments.callee( del["word"], term, rec);
+          var edits = arguments.callee( del["word"], editDistance, rec);
           for (var i = 0; i < edits["words"].length; i++) {
             if(deletes["words"].indexOf(edits["words"][i]) == -1) {
               deletes["words"].push(edits["words"][i]);
@@ -151,6 +157,19 @@ function getEditItems(word, editDistance, rec) {
     }
   }
   return deletes;
+}
+
+// TODO: change the implementation of first. It needs to remove this suggestionList item
+function addLowestDistance(suggestions, suggestion) {
+  if(verbose < 2 && suggestions["words"].length > 0 && suggestions["distance"][0] > suggestion["distance"]) {
+    suggestions["words"].length = 0;
+    suggestions["distance"].length = 0;
+  }
+  if(verbose == 2 || suggestions["words"].length || suggestions["distance"][0] >= suggestion["distance"]) {
+    suggestions["words"].push(suggestion["word"]);
+    suggestions["distance"].push(suggestion["distance"]);
+  }
+  return suggestions;
 }
 
 $.fn.replaceText = function( search, replace, text_only ) {
